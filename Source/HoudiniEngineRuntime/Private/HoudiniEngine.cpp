@@ -173,13 +173,23 @@ FHoudiniEngine::StartupModule()
 		HoudiniLogoStaticMesh->AddToRoot();
 	}
 
-	// Create default material.
-	HoudiniDefaultMaterial =
-		LoadObject<UMaterial>(nullptr, HAPI_UNREAL_RESOURCE_HOUDINI_MATERIAL, nullptr, LOAD_None, nullptr);
-	if(HoudiniDefaultMaterial)
+	//nuku multiple default materials to avoid long creation/baking of newly created TODO use houdini capabilities to directly use unreal materials!?
+	// Create default materials.
+	for (int32 Index=0; Index < 4; Index ++)
 	{
-		HoudiniDefaultMaterial->AddToRoot();
+		FString Name = FString::Printf( HAPI_UNREAL_RESOURCE_HOUDINI_MATERIAL, Index, Index );
+		UMaterial* Material =
+			LoadObject<UMaterial>(nullptr, *Name, nullptr, LOAD_None, nullptr);
+		ensure( Material );
+		if(Material)
+		{
+			Material->AddToRoot();
+			HoudiniDefaultMaterials.Add( Material );
+		}
 	}
+
+	HoudiniDefaultMaterial = HoudiniDefaultMaterials[0];
+
 
 	// Create Houdini digital asset which is used for loading the bgeo files.
 	HoudiniBgeoAsset = LoadObject<UHoudiniAsset>(nullptr, HAPI_UNREAL_RESOURCE_BGEO_IMPORT, nullptr, LOAD_None,

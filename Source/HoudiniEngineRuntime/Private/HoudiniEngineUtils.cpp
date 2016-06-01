@@ -4853,6 +4853,8 @@ FHoudiniEngineUtils::HapiCreateMaterials(UHoudiniAssetComponent* HoudiniAssetCom
 	UMaterialFactoryNew* MaterialFactory = NewObject<UMaterialFactoryNew>();
 	MaterialFactory->AddToRoot();
 
+	int32 DefaultMaterialIndex = 0; //nuku
+
 	for(TSet<HAPI_MaterialId>::TConstIterator IterMaterialId(UniqueMaterialIds); IterMaterialId; ++IterMaterialId)
 	{
 		HAPI_MaterialId MaterialId = *IterMaterialId;
@@ -4899,26 +4901,37 @@ FHoudiniEngineUtils::HapiCreateMaterials(UHoudiniAssetComponent* HoudiniAssetCom
 			}
 			else
 			{
-				// Material was not found, we need to create it.
+				//create a default everytime //nuku
+				if (DefaultMaterialIndex < FHoudiniEngine::Get().HoudiniDefaultMaterials.Num())
+				{
+					Materials.Add( MaterialShopName, FHoudiniEngine::Get().HoudiniDefaultMaterials[DefaultMaterialIndex++] );
+					continue;
+				}
+				else
+				{
+					//original code
+					// Material was not found, we need to create it.
 
-				FString MaterialName = TEXT("");
+					FString MaterialName = TEXT( "" );
 
-				// Create material package and get material name.
-				UPackage* MaterialPackage =
-					FHoudiniEngineUtils::BakeCreateMaterialPackageForComponent(HoudiniAssetComponent, MaterialInfo,
-						MaterialName);
+					// Create material package and get material name.
+					UPackage* MaterialPackage =
+						FHoudiniEngineUtils::BakeCreateMaterialPackageForComponent( HoudiniAssetComponent, MaterialInfo,
+							MaterialName );
 
-				// Create new material.
-				Material = (UMaterial*) MaterialFactory->FactoryCreateNew(UMaterial::StaticClass(), MaterialPackage,
-					*MaterialName, RF_Public | RF_Standalone | RF_Transactional, NULL, GWarn);
+					// Create new material.
+					Material = (UMaterial*)MaterialFactory->FactoryCreateNew( UMaterial::StaticClass(), MaterialPackage,
+						*MaterialName, RF_Public | RF_Standalone | RF_Transactional, NULL, GWarn );
 
-				// Add meta information to this package.
-				FHoudiniEngineUtils::AddHoudiniMetaInformationToPackage(MaterialPackage, Material,
-					HAPI_UNREAL_PACKAGE_META_GENERATED_OBJECT, TEXT("true"));
-				FHoudiniEngineUtils::AddHoudiniMetaInformationToPackage(MaterialPackage, Material,
-					HAPI_UNREAL_PACKAGE_META_GENERATED_NAME, *MaterialName);
+					// Add meta information to this package.
+					FHoudiniEngineUtils::AddHoudiniMetaInformationToPackage( MaterialPackage, Material,
+						HAPI_UNREAL_PACKAGE_META_GENERATED_OBJECT, TEXT( "true" ) );
+					FHoudiniEngineUtils::AddHoudiniMetaInformationToPackage( MaterialPackage, Material,
+						HAPI_UNREAL_PACKAGE_META_GENERATED_NAME, *MaterialName );
 
-				bCreatedNewMaterial = true;
+					bCreatedNewMaterial = true;
+
+				}
 			}
 
 			// If this is an instancer material, enable the instancing flag.

@@ -82,6 +82,11 @@ private:
 	/** Material used as default material. **/
 	UMaterial* HoudiniDefaultMaterial;
 
+public: //nuku 
+	TArray<UMaterial*> HoudiniDefaultMaterials;
+
+private:
+
 	/** Houdini digital asset used for loading the bgeo files. **/
 	UHoudiniAsset* HoudiniBgeoAsset;
 
