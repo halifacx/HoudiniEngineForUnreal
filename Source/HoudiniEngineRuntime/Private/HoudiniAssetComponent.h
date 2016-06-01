@@ -532,7 +532,9 @@ protected:
 	TMap<FHoudiniGeoPartObject, UHoudiniSplineComponent*> SplineComponents;
 
 	/** Material assignments. **/
+public: //Nuku
 	UHoudiniAssetComponentMaterials* HoudiniAssetComponentMaterials;
+protected:
 
 	/** Buffer to hold preset data for serialization purposes. Used only during serialization. **/
 	TArray<char> PresetBuffer;

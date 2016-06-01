@@ -196,13 +196,25 @@ UHoudiniHandleComponent::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
-	for ( size_t i = 0; i < EXformParameter::COUNT; ++i )
+	//nuku data migration
+	if( Ar.EngineVer().GetMajor() == 4 && Ar.EngineVer().GetMinor() <= 9)
 	{
-		Ar << XformParms[i];
+		for( size_t i = 0; i < EXformParameter::COUNT; ++i )
+		{
+			Ar << XformParms[i].AssetParameter;
+			Ar << XformParms[i].TupleIdx;
+		}
 	}
-
-	Ar << RSTParm;
-	Ar << RotOrderParm;
+	else
+	{
+		//original code
+		for( size_t i = 0; i < EXformParameter::COUNT; ++i )
+		{
+			Ar << XformParms[i];
+		}
+		Ar << RSTParm;
+		Ar << RotOrderParm;
+	}
 }
 
 #if WITH_EDITOR

@@ -80,6 +80,14 @@ public:
 	static void AddReferencedObjects(UObject* InThis, FReferenceCollector& Collector);
 
 public:
+	//nuku
+	void SetCurveParameters( bool bClosed, bool bNurbs );
+
+	//nuku
+	void SetChoiceDirectly( EHoudiniAssetInputType::Enum Choice )
+	{
+		OnChoiceChange( StringChoiceLabels[(EHoudiniAssetInputType::Enum)Choice], ESelectInfo::Direct );
+	}
 
 	/** Return id of connected asset id. **/
 	HAPI_AssetId GetConnectedAssetId() const;
