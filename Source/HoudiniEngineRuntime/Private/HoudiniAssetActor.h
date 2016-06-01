@@ -34,13 +34,16 @@ class HOUDINIENGINERUNTIME_API AHoudiniAssetActor : public AActor
 	UPROPERTY(Category = PartyAnimal, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FName PartyAnimalSourceComponentName;
 
-	void RegisterPartyAnimalAssetComponent(UActorComponent* Component) {
+	UPROPERTY(Category = PartyAnimal, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int32 PartyAnimalSourceComponentID;
+
+	void RegisterPartyAnimalAssetComponent(UActorComponent* Component,int32 ComponentID) {
 		check(Component);
 		check(PartyAnimalSourceAssetActor == Component->GetOwner() || PartyAnimalSourceAssetActor == NULL);
 		PartyAnimalSourceAssetActor = Component->GetOwner();
 		PartyAnimalSourceComponentName = Component->GetFName();
+		PartyAnimalSourceComponentID = ComponentID;
 	}
-
 
 public:
 
