@@ -27,6 +27,21 @@ class HOUDINIENGINERUNTIME_API AHoudiniAssetActor : public AActor
 		meta = (ExposeFunctionCategories = "Mesh,Rendering,Physics,Components|HoudiniAsset"))
 	UHoudiniAssetComponent* HoudiniAssetComponent;
 
+	
+	UPROPERTY(Category = PartyAnimal, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AActor* PartyAnimalSourceAssetActor;
+
+	UPROPERTY(Category = PartyAnimal, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FName PartyAnimalSourceComponentName;
+
+	void RegisterPartyAnimalAssetComponent(UActorComponent* Component) {
+		check(Component);
+		check(PartyAnimalSourceAssetActor == Component->GetOwner() || PartyAnimalSourceAssetActor == NULL);
+		PartyAnimalSourceAssetActor = Component->GetOwner();
+		PartyAnimalSourceComponentName = Component->GetFName();
+	}
+
+
 public:
 
 	/** Return true if this actor is used for preview. **/

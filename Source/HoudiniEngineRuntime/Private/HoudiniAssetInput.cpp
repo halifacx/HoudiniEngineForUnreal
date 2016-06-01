@@ -1919,4 +1919,34 @@ UHoudiniAssetInput::OnButtonClickRecommit()
 	return FReply::Handled();
 }
 
+
+void UHoudiniAssetInput::SetCurveParameters( bool bClosed, bool bNurbs )
+{
+	MarkPreChanged();
+
+	for( TMap<FString, UHoudiniAssetParameter*>::TIterator
+		IterParams( InputCurveParameters ); IterParams; ++IterParams )
+	{
+		UHoudiniAssetParameter* HoudiniAssetParameter = IterParams.Value();
+		if( HoudiniAssetParameter->GetParameterName().Equals( TEXT( "close" ) ) )
+		{
+			UHoudiniAssetParameterToggle* Toggle = Cast<UHoudiniAssetParameterToggle>( HoudiniAssetParameter );
+			Toggle->CheckStateChanged( bClosed ? ECheckBoxState::Checked : ECheckBoxState::Unchecked, 0 );
+		}
+		else if( HoudiniAssetParameter->GetParameterName().Equals( TEXT( "type" ) ) ) {
+			UHoudiniAssetParameterChoice* Choice = Cast<UHoudiniAssetParameterChoice>( HoudiniAssetParameter );
+
+			Choice->OnChoiceChange(
+				bNurbs ? TSharedPtr<FString>( new FString( TEXT( "NURBS" ) ) ) : TSharedPtr<FString>( new FString( TEXT( "Polygon" ) ) ),
+				ESelectInfo::Direct
+			);
+		}
+
+	}
+
+	MarkChanged();
+}
+
+
+
 #endif

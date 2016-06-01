@@ -203,6 +203,16 @@ protected:
 	/** Create necessary resources for this input. **/
 	void CreateWidgetResources();
 
+	
+	//nuku
+	void SetCurveParameters( bool bClosed, bool bNurbs );
+
+	//nuku
+	void SetChoiceDirectly( EHoudiniAssetInputType::Enum Choice ) 
+	{
+		OnChoiceChange( StringChoiceLabels[(EHoudiniAssetInputType::Enum)Choice], ESelectInfo::Direct );
+	}
+
 protected:
 
 	/** Parameters used by a curve input asset. **/

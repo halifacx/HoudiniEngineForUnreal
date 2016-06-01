@@ -508,8 +508,11 @@ protected:
 	/** Parameters for this component's asset, indexed by name for fast look up. **/
 	TMap<FString, UHoudiniAssetParameter*> ParameterByName;
 
+public: //Nuku: need to set curve input etc.
 	/** Inputs for this component's asset. **/
 	TArray<UHoudiniAssetInput*> Inputs;
+
+protected:
 
 	/** Instance inputs for this component's asset. Object id is used as key. **/
 	TMap<HAPI_ObjectId, UHoudiniAssetInstanceInput*> InstanceInputs;
